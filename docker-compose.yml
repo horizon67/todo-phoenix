@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    tty: true
+    environment:
+      - MIX_ENV=dev
+      - PORT=4000
+      - DB_HOST=db
+    links:
+      - db
+    ports:
+      - 4000:4000
+    command: mix phx.server
+    volumes:
+      - .:/app
+  db:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_volume:/var/lib/mysql
+volumes:
+  mysql_volume:
