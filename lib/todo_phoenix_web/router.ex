@@ -1,14 +1,31 @@
 defmodule TodoPhoenixWeb.Router do
   use TodoPhoenixWeb, :router
 
+  pipeline :browser do
+    plug :accepts, ["html"]
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+    plug OpenApiSpex.Plug.PutApiSpec, module: TodoPhoenixWeb.ApiSpec
+  end
+
+  scope "/" do
+    pipe_through :browser
+
+    get "/swaggerui", OpenApiSpex.Plug.SwaggerUI, path: "/api/swagger/openapi"
   end
 
   scope "/api", TodoPhoenixWeb do
     pipe_through :api
 
-    resources "/tasks", TaskController, only: [:create, :index]
+    resources "/tasks", TaskController, only: [:create, :index, :update, :delete]
+  end
+
+  scope "/api/swagger" do
+    pipe_through :api
+
+    get "/openapi", OpenApiSpex.Plug.RenderSpec, []
   end
 
   # Enables LiveDashboard only for development
