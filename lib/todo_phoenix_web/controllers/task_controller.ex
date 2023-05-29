@@ -30,7 +30,7 @@ defmodule TodoPhoenixWeb.TaskController do
       {"The task attributes", "application/json", Schemas.TaskRequest, required: true},
     responses: [
       created: {"Task Response", "application/json", Schemas.TaskResponse},
-      bad_request: Schemas.GenericError.response()
+      bad_request: Schemas.BadRequest.response()
     ]
   def create(conn, %{"task" => task_params}) do
     case Todo.create_task(task_params) do
@@ -53,7 +53,7 @@ defmodule TodoPhoenixWeb.TaskController do
     request_body: {"Task params", "application/json", Schemas.TaskRequest, required: true},
     responses: [
       ok: {"Task Response", "application/json", Schemas.TaskResponse},
-      bad_request: Schemas.GenericError.response()
+      bad_request: Schemas.BadRequest.response()
     ]
   def update(conn, %{"id" => id, "task" => task_params}) do
     task = Todo.get_task!(id)

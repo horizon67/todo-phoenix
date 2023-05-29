@@ -124,16 +124,15 @@ defmodule TodoPhoenixWeb.OpenApi.Schemas do
     end
   end
 
-  defmodule GenericError do
+  defmodule BadRequest do
     @moduledoc """
-    Generic error
+    400 - Bad Request
     """
     require OpenApiSpex
     alias OpenApiSpex.Operation
 
-    # OpenApiSpex.schema/1 macro can be optionally used to reduce boilerplate code
     OpenApiSpex.schema(%{
-      title: "Error",
+      title: "BadRequest",
       type: :object,
       properties: %{
         errors: %Schema{
@@ -141,23 +140,17 @@ defmodule TodoPhoenixWeb.OpenApi.Schemas do
           items: %Schema{
             type: :object,
             properties: %{
-              detail: %Schema{
-                type: :string,
-                example: "An error occurred."
-              },
-              title: %Schema{type: :string, example: "Error"}
+              detail: %Schema{type: :string, example: "bad request."},
+              title: %Schema{type: :string, example: "Bad Request"}
             }
           }
         }
       }
     })
 
-    @doc """
-    GenericError object, as a whole response.
-    """
     def response do
       Operation.response(
-        "Error",
+        "Bad Request",
         "application/json",
         __MODULE__
       )
